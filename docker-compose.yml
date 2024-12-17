@@ -1,0 +1,111 @@
+version: '3.8'
+
+services:
+  oscar-server:
+    build: oscar-service/oscar-server
+    container_name: oscar-server
+    depends_on:
+      - movie-service
+      - config-server
+      - eureka-server
+    networks:
+      - develop
+    ports:
+      - "8444:8443"
+    environment:
+      - MOVIE_SERVICE_URL=https://movie-service:8443/movie-web-1.0-SNAPSHOT/api/v1
+  oscar-rest-gateway:
+    build: oscar-service/oscar-rest-gateway
+    container_name: oscar-rest-gateway
+    depends_on:
+      - oscar-server
+      - config-server
+      - eureka-server
+    networks:
+      - develop
+    ports:
+      - "10111:10111"
+  movie-service:
+    build: movie-service
+    container_name: movie-service
+    depends_on:
+      - db
+      - consul
+    networks:
+      - develop
+    ports:
+      - "8443:8443"
+      - "9990:9990"
+      - "9993:9993"
+#  movie-service-2:
+#    build: movie-service-second
+#    container_name: movie-service-2
+#    depends_on:
+#      - db
+#      - consul
+#    networks:
+#      - develop
+#    ports:
+#      - "8445:8445"
+  frontend:
+    build: soa-frontend
+    container_name: frontend
+    networks:
+      - develop
+    ports:
+      - "8081:80"
+    environment:
+      - VITE_MOVIE_URL=http://localhost:9912/movie
+      - VITE_OSCAR_URL=http://localhost:9912/oscar
+  db:
+    image: postgres
+    container_name: soa-db
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=soa-db
+    command: postgres -p 5432
+    volumes:
+      - ./movie-service/deployment/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - postgres_data:/var/lib/postgresql
+    networks:
+      - develop
+    ports:
+      - "5432:5432"
+  eureka-server:
+    build: oscar-service/eureka-server
+    container_name: eureka-server
+    depends_on:
+      - config-server
+    networks:
+      - develop
+    ports:
+      - "8761:8761"
+  consul:
+    image: consul:1.15.4
+    container_name: consul
+    networks:
+      - develop
+    ports:
+      - "8500:8500"
+  api-gateway:
+    build: oscar-service/api-gateway
+    container_name: api-gateway
+    networks:
+      - develop
+    ports:
+      - "9912:9912"
+  config-server:
+    build: oscar-service/config-server
+    container_name: config-server
+    networks:
+      - develop
+    ports:
+      - "8095:8095"
+
+networks:
+  develop:
+
+volumes:
+  postgres_data:
+    driver: local

@@ -1,0 +1,54 @@
+server:
+  port: 9912
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/
+
+logging:
+  level:
+    reactor:
+      netty: INFO
+    org:
+      springframework:
+        cloud:
+          gateway: TRACE
+
+spring:
+  application:
+    name: api-gateway
+  cloud:
+    consul:
+      discovery:
+        enabled: true
+      host: consul
+      port: 8500
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOrigins: "*"
+            allowedMethods: "*"
+            allowedHeaders: "*"
+      httpclient:
+        ssl:
+          use-insecure-trust-manager: true
+        connect-timeout: 1000
+        response-timeout: 5s
+      routes:
+        - id: movie-route
+          uri: lb:https://movie-service
+          predicates:
+            - Path=/movie/**
+          filters:
+            - RewritePath=/movie, /movie-web-1.0-SNAPSHOT/api/v1/movie
+          order: 1
+
+        - id: oscar-route
+          uri: lb:https://oscar-rest-gateway
+          predicates:
+            - Path=/oscar/**
+          filters:
+            - RewritePath=/oscar, /api/v1/oscar
+          order: 2

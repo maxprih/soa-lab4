@@ -1,0 +1,10 @@
+/.idea/
+*/.gradle/
+*/.idea/
+*/build
+*/node_modules
+*/.vscode
+*/*/.gradle
+**/build
+**/target
+movie-service-second

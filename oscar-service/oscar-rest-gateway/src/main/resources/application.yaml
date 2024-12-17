@@ -1,0 +1,5 @@
+server:
+  port: 10111
+
+oscar-server:
+  url: https://oscar-server:8444/ws
