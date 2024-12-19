@@ -1,5 +1,30 @@
+spring:
+  application:
+    name: oscar-rest-gateway
+
 server:
   port: 10111
+logging:
+  level:
+    org:
+      springframework:
+        ws:
+          server:
+            MessageTracing:
+              received: TRACE
+              sent: DEBUG
+          client:
+            MessageTracing:
+              sent: DEBUG
+              received: TRACE
+        web: DEBUG
 
 oscar-server:
-  url: https://oscar-server:8444/ws
+  url: https://oscar-server:8443/ws
+eureka:
+  instance:
+    instanceId: oscar-rest-gateway
+    hostname: oscar-rest-gateway
+  client:
+    service-url:
+      defaultZone: http://eureka-server:8761/eureka/

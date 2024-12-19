@@ -17,7 +17,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
         "height",
         "weight",
         "passportId"
-})
+}, namespace = "http://www.bebra.org/soacommons/model/soap")
 @Getter
 @Setter
 public class PersonXml {

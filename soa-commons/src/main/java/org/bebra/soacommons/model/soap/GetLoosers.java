@@ -14,7 +14,7 @@ import java.util.List;
 @XmlType(name = "", propOrder = {
         "loosers"
 })
-@XmlRootElement(name = "getLoosers")
+@XmlRootElement(name = "getLoosers", namespace = "http://www.bebra.org/soacommons/model/soap")
 @Getter
 @Setter
 public class GetLoosers {

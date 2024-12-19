@@ -37,16 +37,16 @@ services:
       - "8443:8443"
       - "9990:9990"
       - "9993:9993"
-#  movie-service-2:
-#    build: movie-service-second
-#    container_name: movie-service-2
-#    depends_on:
-#      - db
-#      - consul
-#    networks:
-#      - develop
-#    ports:
-#      - "8445:8445"
+  movie-service-2:
+    build: movie-service-second
+    container_name: movie-service-2
+    depends_on:
+      - db
+      - consul
+    networks:
+      - develop
+    ports:
+      - "8445:8445"
   frontend:
     build: soa-frontend
     container_name: frontend
