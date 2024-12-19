@@ -12,6 +12,7 @@ services:
       - develop
     ports:
       - "8444:8443"
+      - "1234:1234"
     environment:
       - MOVIE_SERVICE_URL=https://movie-service:8443/movie-web-1.0-SNAPSHOT/api/v1
   oscar-rest-gateway:
@@ -37,6 +38,7 @@ services:
       - "8443:8443"
       - "9990:9990"
       - "9993:9993"
+      - "1337:1337"
   movie-service-2:
     build: movie-service-second
     container_name: movie-service-2
