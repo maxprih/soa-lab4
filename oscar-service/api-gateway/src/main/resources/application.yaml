@@ -38,7 +38,7 @@ spring:
         response-timeout: 5s
       routes:
         - id: movie-route
-          uri: lb:https://movie-service
+          uri: lb:http://movie-service
           predicates:
             - Path=/movie/**
           filters:
